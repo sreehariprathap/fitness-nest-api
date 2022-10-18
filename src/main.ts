@@ -20,11 +20,7 @@ async function bootstrap() {
       whitelist: true,
     }),
   );
-  app.enableCors({
-    origin: true,
-    methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
-    allowedHeaders: 'Content-Type, Accept',
-  });
+  app.enableCors();
   await app.listen(4242);
 }
 bootstrap();

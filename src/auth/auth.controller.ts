@@ -2,7 +2,7 @@
 import { Controller, HttpStatus, Post } from '@nestjs/common';
 import { Body, Get, HttpCode } from '@nestjs/common/decorators';
 import { AuthService } from './auth.service';
-import { AuthDto, SignUpDto } from './dto';
+import { AuthDto, SignUpDto, UserDto } from './dto';
 
 @Controller('auth')
 export class AuthController {
@@ -29,5 +29,10 @@ export class AuthController {
   @Get('users')
   getUsers() {
     return this.authService.getUsers();
+  }
+
+  @Post('user')
+  getuserDetails(@Body() dto: UserDto) {
+    return this.authService.getuserDetails(dto);
   }
 }

@@ -1,11 +1,11 @@
 /* eslint-disable prettier/prettier */
 import { Injectable } from '@nestjs/common';
-import { PrismaService } from 'src/prisma/prisma.service';
-import { AuthDto, SignUpDto } from './dto';
+import { AuthDto, SignUpDto, UserDto } from './dto';
 import * as argon from 'argon2';
 import { PrismaClientKnownRequestError } from '@prisma/client/runtime';
 import { ForbiddenException } from '@nestjs/common/exceptions';
 import { JwtService } from '@nestjs/jwt/dist';
+import { PrismaService } from 'src/prisma/prisma.service';
 import { ConfigService } from '@nestjs/config/dist/config.service';
 import { ok } from 'assert';
 
@@ -110,12 +110,32 @@ export class AuthService {
     });
     return {
       access_token: token,
+      userId: userId,
+      email: email,
     };
   }
 
   async getUsers() {
     const users = await this.prisma.user.findMany();
     return users;
+  }
+
+  async getuserDetails(dto: UserDto) {
+    const user = await this.prisma.user.findUnique({
+      where: {
+        id: dto.id,
+      },
+    });
+    const fitness = await this.prisma.fitness.findFirst({
+      where: {
+        userId: dto.id,
+      },
+    });
+    if (user != null && fitness != null) {
+      return { user, fitness };
+    } else {
+      return null;
+    }
   }
 
   //bmiCalculator
