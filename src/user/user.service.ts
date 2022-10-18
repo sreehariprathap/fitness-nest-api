@@ -3,6 +3,7 @@ import { PrismaService } from 'src/prisma/prisma.service';
 import { ConfigService } from '@nestjs/config/dist/config.service';
 import { UserDto } from 'src/auth/dto';
 import { PrismaClientKnownRequestError } from '@prisma/client/runtime';
+import { FoodDto } from './dto';
 
 @Injectable()
 export class UserService {
@@ -25,24 +26,5 @@ export class UserService {
       },
     });
     return { user, fitness };
-  }
-
-  async addFoodIntake(dto: FoodDto) {
-    try {
-      const foodIntake = await this.prisma.foodIntake.create({
-        data: {
-          calories: dto.foodItem,
-          userId: dto.userId,
-        },
-      });
-      return { foodIntake };
-    } catch (error) {
-      if (error instanceof PrismaClientKnownRequestError) {
-        if (error.code === 'P2002') {
-          throw new ForbiddenException('something went wrong');
-        }
-      }
-      throw error;
-    }
   }
 }

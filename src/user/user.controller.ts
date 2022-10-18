@@ -19,9 +19,4 @@ export class UserController {
   getuserDetails(@Body() dto: UserDto) {
     return this.userService.getuserDetails(dto);
   }
-  
-  @Post('food-intake')
-  addFoodIntake(@Body() dto: any){
-    return this.userService.addFoodIntake(dto);
-  }
 }
