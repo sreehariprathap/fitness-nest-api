@@ -54,6 +54,7 @@ export class AuthService {
           hash,
           firstName: dto.firstName,
           lastName: dto.lastName,
+          gender: dto.gender
         },
       });
       const fitness = await this.prisma.fitness.create({

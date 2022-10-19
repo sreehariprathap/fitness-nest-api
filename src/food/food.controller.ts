@@ -11,8 +11,13 @@ export class FoodController {
     return this.foodService.addFoodIntake(dto);
   }
 
-  @Get('food-intake/:id')
-  getFoodIntakes(@Param() params) {
-    return this.foodService.getFoodIntakes(params.id);
+  @Post('food-intake/today')
+  getFoodIntakes(@Body() dto: { id: number }) {
+    return this.foodService.getFoodIntakes(dto.id);
+  }
+
+  @Post('calories/today')
+  getCaloriesConsumedToday(@Body() dto: { id: number }) {
+    return this.foodService.getCaloriesConsumedToday(dto.id);
   }
 }

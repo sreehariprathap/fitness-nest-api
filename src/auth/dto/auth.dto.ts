@@ -44,6 +44,9 @@ export class SignUpDto {
   weight: string;
 
   @IsString()
+  gender: string;
+
+  @IsString()
   dateOfBirth: string;
 }
 

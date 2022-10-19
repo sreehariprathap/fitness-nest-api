@@ -21,6 +21,8 @@ model User {
   firstName String?
   lastName String?
 
+  gender String?
+
   fitness Fitness[]
   intakes FoodIntake[]
   workouts WorkOut[]
@@ -60,7 +62,9 @@ model WorkOut {
   id Int @id @default(autoincrement())
   createAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+  
   caloriesBurned String?
+  workoutName String?
   
   userId Int
   user User @relation(fields: [userId],references: [id])

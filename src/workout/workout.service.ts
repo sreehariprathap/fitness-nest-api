@@ -2,22 +2,22 @@ import { ForbiddenException, Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { PrismaClientKnownRequestError } from '@prisma/client/runtime';
 import { PrismaService } from 'src/prisma/prisma.service';
-import { FoodDto } from './dto/food.dto';
+import { WorkOutDto } from './dto/workout.dto';
 
 @Injectable()
-export class FoodService {
+export class WorkoutService {
   constructor(private prisma: PrismaService, private config: ConfigService) {}
 
-  async addFoodIntake(dto: FoodDto) {
+  async addWorkout(dto: WorkOutDto) {
     try {
-      const foodIntake = await this.prisma.foodIntake.create({
+      const workout = await this.prisma.workOut.create({
         data: {
           userId: dto.userId,
-          calories: dto.calories,
-          foodItem: dto.foodIntake,
+          caloriesBurned: dto.caloriesBurned,
+          workoutName: dto.workoutName,
         },
       });
-      return { foodIntake };
+      return { workout };
     } catch (error) {
       if (error instanceof PrismaClientKnownRequestError) {
         if (error.code === 'P2002') {
@@ -28,11 +28,11 @@ export class FoodService {
     }
   }
 
-  async getFoodIntakes(id: number) {
+  async getWorkouts(id: number) {
     const date = new Date();
     const previous = new Date(date.getTime());
     previous.setDate(date.getDate() - 1);
-    const foodIntake = await this.prisma.foodIntake.findMany({
+    const workout = await this.prisma.workOut.findMany({
       where: {
         userId: {
           equals: +id,
@@ -43,15 +43,15 @@ export class FoodService {
         },
       },
     });
-    return { foodIntake };
+    return { workout };
   }
 
-  async getCaloriesConsumedToday(id: number) {
+  async getCaloriesBurned(id: number) {
     const date = new Date();
     const previous = new Date(date.getTime());
     previous.setDate(date.getDate() - 1);
-    let consumedCalories = 0;
-    const foodIntake = await this.prisma.foodIntake.findMany({
+    let burnedCalories = 0;
+    const calories = await this.prisma.workOut.findMany({
       where: {
         userId: {
           equals: +id,
@@ -61,9 +61,9 @@ export class FoodService {
         },
       },
     });
-    foodIntake.forEach((food) => {
-      consumedCalories += +food.calories;
+    calories.forEach((workOut) => {
+      burnedCalories += +workOut.caloriesBurned;
     });
-    return { consumedCalories };
+    return { burnedCalories };
   }
 }
