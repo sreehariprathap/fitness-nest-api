@@ -26,6 +26,8 @@ model User {
   fitness Fitness[]
   intakes FoodIntake[]
   workouts WorkOut[]
+  todos Todos[]
+  goals Goals[]
   
   @@map("users")
 }
@@ -71,18 +73,33 @@ model WorkOut {
   @@map("workouts")
 }
 
-model Bookmark {
+model Todos {
   id Int @id @default(autoincrement())
   createAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
   title String
   description String?
-  link String
+  status Boolean
 
   userId Int
-  // user User @relation(fields: [userId],references: [id])
+  user User @relation(fields: [userId],references: [id])
 
-  @@map("bookmarks")
+  @@map("todos")
+}
+
+model Goals {
+  id Int @id @default(autoincrement())
+  createAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  title String
+  description String?
+  status Boolean
+
+  userId Int
+  user User @relation(fields: [userId],references: [id])
+
+  @@map("goals")
 }
 
