@@ -1,4 +1,42 @@
-import { Injectable } from '@nestjs/common';
+import { ForbiddenException, Injectable } from '@nestjs/common';
+import { PrismaClientKnownRequestError } from '@prisma/client/runtime';
+import { PrismaService } from 'src/prisma/prisma.service';
+import { GoalDto } from './dto/goal.dto';
 
 @Injectable()
-export class GoalsService {}
+export class GoalsService {
+  constructor(private prisma: PrismaService, private config: ConfigService) {}
+
+  async addGoal(dto: GoalDto) {
+    try {
+      const goal = await this.prisma.goals.create({
+        data: {
+          userId: dto.userId,
+          title: dto.title,
+          description: dto.description,
+          year: dto.year,
+          status: dto.status,
+        },
+      });
+      return { goal };
+    } catch (error) {
+      if (error instanceof PrismaClientKnownRequestError) {
+        if (error.code === 'P2002') {
+          throw new ForbiddenException('something went wrong');
+        }
+      }
+      throw error;
+    }
+  }
+
+  async getAllGoals(id: number) {
+    const goals = await this.prisma.goals.findMany({
+      where: {
+        userId: {
+          equals: +id,
+        },
+      },
+    });
+    return { goals };
+  }
+}

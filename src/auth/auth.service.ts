@@ -54,7 +54,7 @@ export class AuthService {
           hash,
           firstName: dto.firstName,
           lastName: dto.lastName,
-          gender: dto.gender
+          gender: dto.gender,
         },
       });
       const fitness = await this.prisma.fitness.create({
@@ -62,7 +62,12 @@ export class AuthService {
           weight: dto.weight,
           height: dto.height,
           bmi: this.bmi(+dto.weight, +dto.height),
-          caloriesPerDay: this.bmr(+dto.weight, +dto.height, dto.dateOfBirth),
+          caloriesPerDay: this.bmr(
+            +dto.weight,
+            +dto.height,
+            dto.dateOfBirth,
+            dto.gender,
+          ),
           age: this.getAge(dto.dateOfBirth),
           userId: user.id,
         },
@@ -145,8 +150,13 @@ export class AuthService {
   }
 
   //bmr calculator
-  bmr(weight: number, height: number, dateOfBirth: string) {
+  bmr(weight: number, height: number, dateOfBirth: string, gender?: string) {
     const age = this.getAge(dateOfBirth);
+    if (gender == 'male') {
+      return (10 * weight + 6.25 * height - 5 * age + 5).toString();
+    } else if (gender == 'female') {
+      return (10 * weight + 6.25 * height - 5 * age - 16).toString();
+    }
     return (66.47 + 13.75 * weight + 5.003 * height - 6.755 * age).toString();
   }
 

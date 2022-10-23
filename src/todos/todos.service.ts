@@ -41,10 +41,10 @@ export class TodosService {
         },
         date: {
           gte: previous,
-          lt: date,
         },
       },
     });
+
     return { todasTodos };
   }
 
@@ -57,5 +57,17 @@ export class TodosService {
       },
     });
     return { todos };
+  }
+
+  async markAsDone(id: number) {
+    const todo = await this.prisma.todos.update({
+      where: {
+        id: +id,
+      },
+      data: {
+        status: false,
+      },
+    });
+    return { todo };
   }
 }

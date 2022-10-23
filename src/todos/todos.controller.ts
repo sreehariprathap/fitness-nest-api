@@ -11,13 +11,18 @@ export class TodosController {
     return this.todoService.addTodo(dto);
   }
 
-  @Post('allTodos')
+  @Post('all-todos')
   getFoodIntakes(@Body() dto: { id: number }) {
     return this.todoService.getAllTodos(dto.id);
   }
 
   @Post('today')
-  getCaloriesConsumedToday(@Body() dto: { id: number }) {
+  getTodaysTodos(@Body() dto: { id: number }) {
     return this.todoService.getTodaysTodos(dto.id);
+  }
+
+  @Post('mark-as-done')
+  markAsDone(@Body() dto: { id: number }) {
+    return this.todoService.markAsDone(dto.id);
   }
 }

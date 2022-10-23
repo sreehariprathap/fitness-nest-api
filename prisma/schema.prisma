@@ -97,6 +97,8 @@ model Goals {
   title String
   description String?
   status Boolean
+  year String?
+  
 
   userId Int
   user User @relation(fields: [userId],references: [id])
