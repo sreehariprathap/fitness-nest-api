@@ -1,4 +1,5 @@
 import { ForbiddenException, Injectable } from '@nestjs/common';
+import { ConfigService } from '@nestjs/config';
 import { PrismaClientKnownRequestError } from '@prisma/client/runtime';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { GoalDto } from './dto/goal.dto';
@@ -38,5 +39,17 @@ export class GoalsService {
       },
     });
     return { goals };
+  }
+
+  async changeStatus(id: number, status: string) {
+    const goal = await this.prisma.goals.update({
+      where: {
+        id: +id,
+      },
+      data: {
+        status: status,
+      },
+    });
+    return { goal };
   }
 }

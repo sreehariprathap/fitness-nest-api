@@ -96,7 +96,7 @@ model Goals {
 
   title String
   description String?
-  status Boolean
+  status String?
   year String?
   
 

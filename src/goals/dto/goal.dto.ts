@@ -9,9 +9,9 @@ export class GoalDto {
   @IsNotEmpty()
   description: string;
 
-  @IsBoolean()
+  @IsString()
   @IsNotEmpty()
-  status: boolean;
+  status: string;
 
   @IsString()
   @IsNotEmpty()

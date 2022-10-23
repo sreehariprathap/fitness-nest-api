@@ -1,4 +1,4 @@
-import { Body, Controller, Post } from '@nestjs/common';
+import { Body, Controller, Patch, Post } from '@nestjs/common';
 import { GoalDto } from './dto/goal.dto';
 import { GoalsService } from './goals.service';
 
@@ -14,5 +14,10 @@ export class GoalsController {
   @Post('all-goals')
   getFoodIntakes(@Body() dto: { id: number }) {
     return this.goalService.getAllGoals(dto.id);
+  }
+
+  @Patch('change-Status')
+  markAsDone(@Body() dto: { id: number; status: string }) {
+    return this.goalService.changeStatus(dto.id, dto.status);
   }
 }
