@@ -78,10 +78,10 @@ model Todos {
   createAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
-  title String
+  title String?
   description String?
-  status Boolean
-  date DateTime
+  status Boolean?
+  date DateTime?
 
   userId Int
   user User @relation(fields: [userId],references: [id])
