@@ -2,6 +2,7 @@ import { ForbiddenException, Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { PrismaClientKnownRequestError } from '@prisma/client/runtime';
 import { PrismaService } from 'src/prisma/prisma.service';
+import { WeightDto } from './dto/weight.dto';
 import { WorkOutDto } from './dto/workout.dto';
 
 @Injectable()
@@ -65,5 +66,39 @@ export class WorkoutService {
       burnedCalories += +workOut.caloriesBurned;
     });
     return { burnedCalories };
+  }
+
+  async addWeight(dto: WeightDto) {
+    try {
+      const weight = await this.prisma.weights.create({
+        data: {
+          userId: dto.userId,
+          weight: dto.weight,
+        },
+      });
+      return { weight };
+    } catch (error) {
+      if (error instanceof PrismaClientKnownRequestError) {
+        if (error.code === 'P2002') {
+          throw new ForbiddenException('something went wrong');
+        }
+      }
+      throw error;
+    }
+  }
+
+  async getWeightHistory(id: number) {
+    const weights = await this.prisma.weights.findMany({
+      where: {
+        userId: {
+          equals: +id,
+        },
+      },
+      select: {
+        weight: true,
+        createAt: true,
+      },
+    });
+    return { weights };
   }
 }

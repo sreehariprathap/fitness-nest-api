@@ -1,4 +1,5 @@
 import { Body, Controller, Post } from '@nestjs/common';
+import { WeightDto } from './dto/weight.dto';
 import { WorkOutDto } from './dto/workout.dto';
 import { WorkoutService } from './workout.service';
 
@@ -19,5 +20,15 @@ export class WorkoutController {
   @Post('calories/today')
   getCaloriesBurned(@Body() dto: { id: number }) {
     return this.workoutService.getCaloriesBurned(dto.id);
+  }
+
+  @Post('weight')
+  addWeight(@Body() dto: WeightDto) {
+    return this.workoutService.addWeight(dto);
+  }
+
+  @Post('weight-history')
+  getWeightHistory(@Body() dto: { id: number }) {
+    return this.workoutService.getWeightHistory(dto.id);
   }
 }
