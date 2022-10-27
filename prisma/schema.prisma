@@ -92,7 +92,7 @@ model Todos {
 
 model Goals {
   id Int @id @default(autoincrement())
-  createAt DateTime @default(now())
+  createAt DateTime @default(now()) @db.Date
   updatedAt DateTime @updatedAt
 
   title String

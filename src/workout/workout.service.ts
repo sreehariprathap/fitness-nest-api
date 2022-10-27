@@ -89,6 +89,11 @@ export class WorkoutService {
 
   async getWeightHistory(id: number) {
     const weights = await this.prisma.weights.findMany({
+      orderBy: [
+        {
+          createAt: 'asc',
+        },
+      ],
       where: {
         userId: {
           equals: +id,
@@ -100,5 +105,29 @@ export class WorkoutService {
       },
     });
     return { weights };
+  }
+
+  async getWorkoutHeatMap(id: number, date: string) {
+    const filterDate = new Date(date);
+    const workouts = await this.prisma.workOut.findMany({
+      orderBy: [
+        {
+          createAt: 'asc',
+        },
+      ],
+      where: {
+        userId: {
+          equals: +id,
+        },
+        createAt: {
+          gte: filterDate,
+        },
+      },
+      select: {
+        caloriesBurned: true,
+        createAt: true,
+      },
+    });
+    return { workouts };
   }
 }

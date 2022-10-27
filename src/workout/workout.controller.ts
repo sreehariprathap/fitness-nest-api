@@ -31,4 +31,9 @@ export class WorkoutController {
   getWeightHistory(@Body() dto: { id: number }) {
     return this.workoutService.getWeightHistory(dto.id);
   }
+
+  @Post('workout-heatmap')
+  getWorkoutHeatMap(@Body() dto: { id: number; date: string }) {
+    return this.workoutService.getWorkoutHeatMap(dto.id, dto.date);
+  }
 }
