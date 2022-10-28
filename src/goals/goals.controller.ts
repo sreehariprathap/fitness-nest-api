@@ -20,4 +20,9 @@ export class GoalsController {
   markAsDone(@Body() dto: { id: number; status: string }) {
     return this.goalService.changeStatus(dto.id, dto.status);
   }
+
+  @Post('daily-goals')
+  getDailyGoals(@Body() dto: { id: number }) {
+    return this.goalService.getDailyGoals(dto.id);
+  }
 }

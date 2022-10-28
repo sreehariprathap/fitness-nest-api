@@ -29,6 +29,7 @@ model User {
   todos Todos[]
   goals Goals[]
   weights Weights[]
+  dailyGoals DailyGoals[]
   
   @@map("users")
 }
@@ -107,12 +108,27 @@ model Goals {
   @@map("goals")
 }
 
+model DailyGoals {
+  id Int @id @default(autoincrement())
+  
+  inTakeGoal Float
+  inTakeGoalStatus Boolean @default(false)
+  burnGoal Float
+  burnGoalStatus Boolean @default(false)
+  waterGoal Int
+  waterGoalStatus Boolean @default(false)
+
+  userId Int
+  user User @relation(fields: [userId],references: [id])
+  @@map("dailyGoals")
+}
+
 model Weights {
   id Int @id @default(autoincrement())
   createAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
-  weight Int
+  weight Float
 
   userId Int
   user User @relation(fields: [userId],references: [id])

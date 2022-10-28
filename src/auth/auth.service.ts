@@ -62,19 +62,30 @@ export class AuthService {
           weight: dto.weight,
           height: dto.height,
           bmi: this.bmi(+dto.weight, +dto.height),
-          caloriesPerDay: this.bmr(
+          caloriesPerDay: (this.bmr(
+            +dto.weight,
+            +dto.height,
+            dto.dateOfBirth,
+            dto.gender,
+          )).toString(),
+          age: this.getAge(dto.dateOfBirth),
+          userId: user.id,
+        },
+      });
+      const dailyGoals = await this.prisma.dailyGoals.create({
+        data: {
+          userId: user.id,
+          inTakeGoal: +this.bmr(
             +dto.weight,
             +dto.height,
             dto.dateOfBirth,
             dto.gender,
           ),
-          age: this.getAge(dto.dateOfBirth),
-          userId: user.id,
+          burnGoal: 600,
+          waterGoal: this.waterIntakeCalculator(+dto.weight),
         },
       });
-      // return the saved user
-      // return this.signToken(user.id, user.email);
-      return { user, fitness };
+      return {user};
     } catch (error) {
       if (error instanceof PrismaClientKnownRequestError) {
         if (error.code === 'P2002') {
@@ -157,7 +168,7 @@ export class AuthService {
     } else if (gender == 'female') {
       return (10 * weight + 6.25 * height - 5 * age - 16).toString();
     }
-    return (66.47 + 13.75 * weight + 5.003 * height - 6.755 * age).toString();
+    return Math.round(66.47 + 13.75 * weight + 5.003 * height - 6.755 * age);
   }
 
   //calculate age
@@ -170,5 +181,11 @@ export class AuthService {
       age--;
     }
     return age;
+  }
+
+  // calculate amount of water to drink in bottles
+  waterIntakeCalculator(weight: number) {
+    // Water (in litres) to drink a day = Your Weight (in Kg) multiplied by 0.033
+    return Math.round(weight * 0.033);
   }
 }

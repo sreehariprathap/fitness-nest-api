@@ -52,4 +52,15 @@ export class GoalsService {
     });
     return { goal };
   }
+
+  async getDailyGoals(id: number) {
+    const goal = await this.prisma.dailyGoals.findMany({
+      where: {
+        userId: +id,
+      },
+    });
+    return { goal };
+  }
+
+ 
 }
