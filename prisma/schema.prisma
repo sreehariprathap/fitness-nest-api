@@ -112,10 +112,13 @@ model DailyGoals {
   id Int @id @default(autoincrement())
   
   inTakeGoal Float
+  inTakeGoalCount Float @default(0)
   inTakeGoalStatus Boolean @default(false)
   burnGoal Float
+  burnGoalCount Float @default(0)
   burnGoalStatus Boolean @default(false)
   waterGoal Int
+  waterCount Int @default(0)
   waterGoalStatus Boolean @default(false)
 
   userId Int

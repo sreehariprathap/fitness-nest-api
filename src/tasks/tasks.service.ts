@@ -16,6 +16,9 @@ export class TasksService {
         inTakeGoalStatus: false,
         burnGoalStatus: false,
         waterGoalStatus: false,
+        inTakeGoalCount: 0,
+        burnGoalCount: 0,
+        waterCount: 0,
       },
     });
   }

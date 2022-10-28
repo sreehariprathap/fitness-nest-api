@@ -25,4 +25,9 @@ export class GoalsController {
   getDailyGoals(@Body() dto: { id: number }) {
     return this.goalService.getDailyGoals(dto.id);
   }
+
+  @Patch('add-water')
+  addWater(@Body() dto: { id: number; action: 'add' }) {
+    return this.goalService.addWater(dto.id, dto.action);
+  }
 }

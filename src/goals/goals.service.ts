@@ -62,5 +62,33 @@ export class GoalsService {
     return { goal };
   }
 
- 
+  async addWater(id: number, action: string) {
+    const dailyGoals = await this.prisma.dailyGoals.findUnique({
+      where: {
+        id: +id,
+      },
+    });
+    if (action === 'add') {
+      const waterCount = await this.prisma.dailyGoals.update({
+        where: {
+          id: +id,
+        },
+        data: {
+          waterCount: { increment: 1 },
+        },
+      });
+      return { waterCount };
+    } else if (action === 'subtract' && dailyGoals.waterCount > 0) {
+      const waterCount = await this.prisma.dailyGoals.update({
+        where: {
+          id: +id,
+        },
+        data: {
+          waterCount: { decrement: 1 },
+        },
+      });
+      return { waterCount };
+    }
+    throw new ForbiddenException('water cant be subtracted');
+  }
 }
