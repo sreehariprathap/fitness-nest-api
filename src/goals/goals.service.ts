@@ -53,6 +53,31 @@ export class GoalsService {
     return { goal };
   }
 
+  async dailyGoalsStatusChange(id: number, action: string) {
+    if (action === 'workoutGoal') {
+      const goal = await this.prisma.dailyGoals.update({
+        where: {
+          id: +id,
+        },
+        data: {
+          burnGoalStatus: true,
+        },
+      });
+      return { goal };
+    } else if (action === 'intakeGoal') {
+      const goal = await this.prisma.dailyGoals.update({
+        where: {
+          id: +id,
+        },
+        data: {
+          inTakeGoalStatus: true,
+        },
+      });
+      return { goal };
+    }
+    throw new ForbiddenException('invalid parameters');
+  }
+
   async getDailyGoals(id: number) {
     const goal = await this.prisma.dailyGoals.findMany({
       where: {
@@ -69,6 +94,16 @@ export class GoalsService {
       },
     });
     if (action === 'add') {
+      if (dailyGoals.waterCount >= dailyGoals.waterGoal) {
+        const status = await this.prisma.dailyGoals.update({
+          where: {
+            id: +id,
+          },
+          data: {
+            waterGoalStatus: true,
+          },
+        });
+      }
       const waterCount = await this.prisma.dailyGoals.update({
         where: {
           id: +id,
@@ -79,6 +114,16 @@ export class GoalsService {
       });
       return { waterCount };
     } else if (action === 'subtract' && dailyGoals.waterCount > 0) {
+      if (dailyGoals.waterCount <= dailyGoals.waterGoal) {
+        const status = await this.prisma.dailyGoals.update({
+          where: {
+            id: +id,
+          },
+          data: {
+            waterGoalStatus: false,
+          },
+        });
+      }
       const waterCount = await this.prisma.dailyGoals.update({
         where: {
           id: +id,

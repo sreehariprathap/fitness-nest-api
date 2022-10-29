@@ -30,4 +30,9 @@ export class GoalsController {
   addWater(@Body() dto: { id: number; action: 'add' }) {
     return this.goalService.addWater(dto.id, dto.action);
   }
+
+  @Patch('daily-goals/change-Status')
+  dailyGoalsStatusChange(@Body() dto: { id: number; action: string }) {
+    return this.goalService.dailyGoalsStatusChange(dto.id, dto.action);
+  }
 }
