@@ -35,4 +35,10 @@ export class AuthController {
   getuserDetails(@Body() dto: UserDto) {
     return this.authService.getuserDetails(dto);
   }
+
+  @HttpCode(HttpStatus.OK)
+  @Get('ping')
+  ping() {
+    return "Hello from fitness server";
+  }
 }
