@@ -9,8 +9,8 @@ export class TasksService {
   private readonly logger = new Logger(TasksService.name);
 
   // reset goals every day at 11.59 pm
-  // @Cron('* 59 23 * * *')
-  @Cron('59 * * * * *')
+  @Cron('* 59 23 * * *')
+  // @Cron('59 * * * * *')
   async resetDailyGoals() {
     await this.prisma.dailyGoals.updateMany({
       data: {
